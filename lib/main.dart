@@ -39,12 +39,9 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //Valor
-            GetX<ValueController>(
-              init: valueController,
-              builder: (ctrl) {
-                return Text('Valor definido: ${ctrl.definedValue} ');
-              },
-            ),
+            Obx(() {
+              return Text('Valor definido: ${valueController.definedValue}');
+            }),
             //Campo
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 32),
@@ -53,10 +50,9 @@ class HomePage extends StatelessWidget {
               ),
             ),
             //Botão
-            GetX(
-              init: valueController,
-              builder: (ctrl) {
-                return ctrl.isLoading.value
+            Obx(
+              () {
+                return valueController.isLoading.value
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () {
@@ -66,7 +62,7 @@ class HomePage extends StatelessWidget {
                         child: const Text('Confirmar'),
                       );
               },
-            )
+            ),
           ],
         ),
       ),
