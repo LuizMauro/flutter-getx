@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:learning_getx/value_controller.dart';
 
 void main() {
@@ -15,8 +15,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: false,
       ),
       home: SafeArea(child: HomePage()),
     );
@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //Valor
-            GetBuilder<ValueController>(
+            GetX<ValueController>(
               init: valueController,
               builder: (ctrl) {
                 return Text('Valor definido: ${ctrl.definedValue} ');
@@ -53,10 +53,10 @@ class HomePage extends StatelessWidget {
               ),
             ),
             //Botão
-            GetBuilder(
+            GetX(
               init: valueController,
               builder: (ctrl) {
-                return ctrl.isLoading
+                return ctrl.isLoading.value
                     ? const CircularProgressIndicator()
                     : ElevatedButton(
                         onPressed: () {
