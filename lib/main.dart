@@ -115,7 +115,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class DataScreen extends StatelessWidget {
+class DataScreen extends GetView<UserController> {
   // final userController = Get.find<UserController>();
 
   const DataScreen({
@@ -138,23 +138,19 @@ class DataScreen extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Apresentação do nome
-            GetX<UserController>(
-              builder: (ctrl) {
-                return Text(
-                  'Nome: ${ctrl.user.value.name}',
-                  style: commonStyle(),
-                );
-              },
+            Obx(
+              () => Text(
+                'Nome: ${controller.user.value.name}',
+                style: commonStyle(),
+              ),
             ),
 
             // Apresentação da idade
-            GetX<UserController>(
-              builder: (ctrl) {
-                return Text(
-                  'idade: ${ctrl.user.value.age}',
-                  style: commonStyle(),
-                );
-              },
+            Obx(
+              () => Text(
+                'idade: ${controller.user.value.age}',
+                style: commonStyle(),
+              ),
             ),
           ],
         ),
