@@ -10,7 +10,7 @@ class UserController extends GetxController {
     });
   }
 
-  void setUserage(int userAge) {
+  void setUserAge(int userAge) {
     user.update((obj) {
       obj?.age = userAge;
     });

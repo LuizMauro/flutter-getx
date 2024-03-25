@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:get/get.dart';
 import 'package:learning_getx/user_controller.dart';
 
 void main() {
+  // Get.put<UserController>(UserController());
+
+  Get.lazyPut<UserController>(() => UserController());
+
   runApp(const MyApp());
 }
 
@@ -18,23 +22,18 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: false,
       ),
-      home: SafeArea(child: HomePage()),
+      home: HomePage(),
     );
   }
 }
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  HomePage({Key? key}) : super(key: key);
 
   final nameController = TextEditingController();
   final ageController = TextEditingController();
 
-  TextStyle commomStyle() => const TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w500,
-      );
-
-  final userController = UserController();
+  final userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,33 +44,20 @@ class HomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Obx(
-              () => Text(
-                'Nome: ${userController.user.value.name}',
-                style: commomStyle(),
-              ),
-            ),
-            Obx(
-              () => Text(
-                'Idade: ${userController.user.value.age}',
-                style: commomStyle(),
-              ),
-            ),
-            const Divider(
-              thickness: 1.5,
-              height: 20,
-              color: Colors.blue,
-            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                // Campo de nome
                 Expanded(
-                    child: TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Nome',
+                  child: TextField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Nome',
+                    ),
                   ),
-                )),
+                ),
+
+                // Botão para salvar o nome
                 ElevatedButton(
                   onPressed: () {
                     userController.setUserName(nameController.text);
@@ -80,28 +66,91 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
+
+            // Espaçamento
+            const SizedBox(height: 10),
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
+                // Campo de idade
                 Expanded(
                   child: TextField(
-                    keyboardType: TextInputType.number,
                     controller: ageController,
                     decoration: const InputDecoration(
                       labelText: 'Idade',
                     ),
                   ),
                 ),
+
+                // Botão para salvar a idade
                 ElevatedButton(
                   onPressed: () {
-                    userController.setUserage(int.parse(ageController.text));
+                    userController.setUserAge(int.parse(ageController.text));
                   },
                   child: const Text('Salvar'),
                 ),
               ],
+            ),
+
+            // Espaçamento
+            const SizedBox(height: 10),
+
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return DataScreen();
+                    },
+                  ),
+                );
+              },
+              child: const Text('Tela de dados'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class DataScreen extends StatelessWidget {
+  final userController = Get.find<UserController>();
+
+  DataScreen({
+    Key? key,
+  }) : super(key: key);
+
+  TextStyle commonStyle() => const TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Dados'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Apresentação do nome
+            Obx(
+              () => Text(
+                'Nome: ${userController.user.value.name}',
+                style: commonStyle(),
+              ),
+            ),
+
+            // Apresentação da idade
+            Obx(
+              () => Text(
+                'idade: ${userController.user.value.age}',
+                style: commonStyle(),
+              ),
             ),
           ],
         ),
